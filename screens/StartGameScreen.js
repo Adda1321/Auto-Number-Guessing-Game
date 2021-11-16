@@ -12,23 +12,26 @@ import Card from '../Components/Card';
 import colors from '../constants/Colors';
 import Input from '../Components/Input';
 import NumberContainer from '../Components/NumberContainer';
-function StartGameScreen() {
+function StartGameScreen(props) {
   const [input_text, setinput_text] = useState('');
   const [confirmed, setconfirmed] = useState(false);
   const [SelectedNumber, setsetSelectedNumber] = useState();
 
   const InputHandler = currentInput => {
     setinput_text(currentInput.replace(/[^0-9]/g, ''));
+  
   };
 
   const resetHandler = () => {
     setinput_text('');
   };
   const confirmHandler = () => {
-    const chooseNumber = parseInt(input_text)
+    const chooseNumber = parseInt(input_text);
     // already valifated but again veledating for -ve numbers
     if (isNaN(chooseNumber) || chooseNumber <= 0 || chooseNumber > 99) {
-      Alert.alert('Alert Title', 'invalidNumber!', [{text: 'okay', style:'default' , onPress:resetHandler}]);
+      Alert.alert('Alert Title', 'invalidNumber!', [
+        {text: 'okay', style: 'default', onPress: resetHandler},
+      ]);
       return;
     }
     //  SelectedNumber
@@ -39,13 +42,15 @@ function StartGameScreen() {
   };
   let confirmedOutput;
   if (confirmed) {
-    confirmedOutput = <Card style={styles.Confirm_Output}>
-<Text> Your Selected number: </Text>
-<View>
-<NumberContainer> {SelectedNumber}</NumberContainer>
-<Button title="START" />
-</View>
-    </Card>
+    confirmedOutput = (
+      <Card style={styles.Confirm_Output}>
+        <Text> Your Selected number: </Text>
+        <View>
+          <NumberContainer> {SelectedNumber}</NumberContainer>
+          <Button title="START" onPress={()=>props.strt(SelectedNumber)}/>
+        </View>
+      </Card>
+    );
   }
   return (
     <TouchableWithoutFeedback
@@ -119,10 +124,10 @@ const styles = StyleSheet.create({
     width: 50,
     textAlign: 'center',
   },
-  Confirm_Output:{
-    marginTop:10,
-    alignItems:'center',
-  }
+  Confirm_Output: {
+    marginTop: 10,
+    alignItems: 'center',
+  },
 });
 
 export default StartGameScreen;

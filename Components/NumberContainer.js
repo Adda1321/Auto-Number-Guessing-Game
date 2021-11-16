@@ -18,12 +18,14 @@ container:{
     padding:10,
     borderRadius:5,
     marginVertical:10,
+    textAlign:'center',
     alignItems:'center',
     justifyContent: 'center',
 },
 number:{
     color:colors.accent,
     fontSize:22,
+textAlign:'center',
 
 }
 

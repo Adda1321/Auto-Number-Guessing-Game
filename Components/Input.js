@@ -1,9 +1,13 @@
-import React from 'react'
+import React,{useRef,useEffect,Component} from 'react'
 
 import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
 function Input(props) {
+    const inputRef=useRef(null);
+useEffect(()=>{
+inputRef.current.focus();
+},[])
     return (
-        <TextInput  {...props} style={{...styles.Input,...props.style}} />
+        <TextInput ref={inputRef} {...props} style={{...styles.Input,...props.style}} />
     )
 };
 
