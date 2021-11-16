@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {View, StyleSheet, Text, Button, Alert} from 'react-native';
 import colors from '../constants/Colors';
 import NumberContainer from '../Components/NumberContainer';
@@ -19,10 +19,15 @@ function GameScreen(props) {
   const [CurrentGuess, setCurrentGuess] = useState(
     choosenumber(1, 100, props.user),
   );
-
+  const [rounds, setrounds] = useState(0);
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
-
+  const {onGameOver, user} = props;
+  useEffect(() => {
+    if (CurrentGuess === user) {
+      onGameOver(rounds);
+    }
+  }, [CurrentGuess, user, onGameOver]);
   const nextGuesHandler = direction => {
     if (
       (direction === 'lower' && CurrentGuess < props.user) ||
@@ -38,9 +43,14 @@ function GameScreen(props) {
     } else {
       currentLow.current = CurrentGuess;
     }
-    const nextNumber = choosenumber(currentLow.current, currentHigh.current, CurrentGuess);
-    
+    const nextNumber = choosenumber(
+      currentLow.current,
+      currentHigh.current,
+      CurrentGuess,
+    );
+
     setCurrentGuess(nextNumber);
+    setrounds(currRounds => currRounds + 1);
   };
 
   return (
@@ -49,10 +59,7 @@ function GameScreen(props) {
       <NumberContainer>{CurrentGuess}</NumberContainer>
       <Card style={styles.btncontainer}>
         <Button title="LOWER" onPress={nextGuesHandler.bind(this, 'lower')} />
-        <Button
-          title="GREATER"
-          onPress={()=>nextGuesHandler('greater')}
-        />
+        <Button title="GREATER" onPress={() => nextGuesHandler('greater')} />
       </Card>
     </View>
   );
